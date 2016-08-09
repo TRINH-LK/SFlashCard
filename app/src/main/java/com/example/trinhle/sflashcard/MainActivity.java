@@ -1,6 +1,8 @@
 package com.example.trinhle.sflashcard;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -44,14 +46,21 @@ public class MainActivity extends AppCompatActivity {
         createToolbar();
         setTitle("SFlashCard");
         handler = new CategoryHandler(this);
-        if (handler.getCategoryCount() == 0) {
-            requestCategoryJSON();
-        } else {
+        populateCategory();
+        handleEvent();
+
+    }
+
+    // Set up to populate Category view
+    private void populateCategory() {
+        if (handler.getCategoryCount() != 0) {
             adapter = new CategoryAdapter(MainActivity.this, handler.getAllCategory());
             lvCategory.setAdapter(adapter);
-            handleEvent();
+        } else if (checkInternetConnect()){
+            requestCategoryJSON();
+        } else {
+            Toast.makeText(getApplicationContext(), "No Internet Connect", Toast.LENGTH_LONG).show();
         }
-
     }
 
     // Initial view
@@ -77,7 +86,11 @@ public class MainActivity extends AppCompatActivity {
         lvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Category selectedItem = (Category) lvCategory.getItemAtPosition(i);
+
                 Intent collectionIntent = new Intent(MainActivity.this, CollectionActivity.class);
+                collectionIntent.putExtra("categoryID", selectedItem.getCategoryId());
+                collectionIntent.putExtra("categoryName", selectedItem.getCategoryName());
                 startActivity(collectionIntent);
             }
         });
@@ -96,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 Type type = new TypeToken<List<Category>>(){}.getType();
                 List<Category> categories = categoryGson.fromJson(response, type);
 
+                // save category data to database
                 for (int i = 0; i < categories.size(); i++) {
                     Category item = categories.get(i);
                     handler.addCategory(item);
@@ -103,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
                 adapter = new CategoryAdapter(MainActivity.this, categories);
                 lvCategory.setAdapter(adapter);
-                handleEvent();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -112,5 +125,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         queue.add(request);
+    }
+
+    // Check internet connection
+    private boolean checkInternetConnect() {
+        ConnectivityManager connection = (ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo info = connection.getActiveNetworkInfo();
+        return ((info != null) && info.isConnected());
     }
 }

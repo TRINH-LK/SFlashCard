@@ -18,6 +18,8 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="20sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:layout_gravity="center"
             android:gravity="center"/>
     </android.support.v7.widget.Toolbar>
