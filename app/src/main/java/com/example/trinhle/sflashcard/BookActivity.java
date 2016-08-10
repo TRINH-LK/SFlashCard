@@ -3,10 +3,12 @@ package com.example.trinhle.sflashcard;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.trinhle.sflashcard.adapter.BookAdapter;
 import com.example.trinhle.sflashcard.database.BookHandler;
 import com.example.trinhle.sflashcard.model.Book;
+import com.example.trinhle.sflashcard.model.Collection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -53,6 +56,17 @@ public class BookActivity extends AppCompatActivity {
         bookHandler = new BookHandler(this);
         populateBook(urlJSON, collectionId);
 
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // Set up to populate Book view
@@ -85,14 +99,8 @@ public class BookActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tbBook.setNavigationIcon(R.drawable.back);
-        tbBook.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent bookUpIntent = new Intent(BookActivity.this, CollectionActivity.class);
-                startActivity(bookUpIntent);
-            }
-        });
     }
+
 
     // Getting Book data from JSON
     private void requestBookJSON(String url, final String collectionId) {

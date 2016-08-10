@@ -8,6 +8,6 @@ import java.util.ArrayList;
  * Created by Trinh Le on 09/08/2016.
  */
 public interface BookListener {
-    public void addBook(Book book, String collectionId);
-    public ArrayList<Book> getListBookWithCollectionId(String collectionId);
+    void addBook(Book book, String collectionId);
+    ArrayList<Book> getListBookWithCollectionId(String collectionId);
 }

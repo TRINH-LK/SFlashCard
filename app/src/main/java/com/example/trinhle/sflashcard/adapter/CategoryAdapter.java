@@ -79,4 +79,8 @@ public class CategoryAdapter extends BaseAdapter {
         private TextView tvDescription;
         private TextView tvNumCol;
     }
+
+    public void populateThumblink() {
+
+    }
 }

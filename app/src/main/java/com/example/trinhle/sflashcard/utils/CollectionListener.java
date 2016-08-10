@@ -9,6 +9,6 @@ import java.util.ArrayList;
  */
 public interface CollectionListener {
 
-    public void addCollection(Collection collection, String categoryId);
-    public ArrayList<Collection> getAllCollectionWithCategory(String categoryId);
+    void addCollection(Collection collection, String categoryId);
+    ArrayList<Collection> getAllCollectionWithCategory(String categoryId);
 }
