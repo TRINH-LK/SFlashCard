@@ -10,13 +10,15 @@ import android.widget.TextView;
 
 import com.example.trinhle.sflashcard.R;
 import com.example.trinhle.sflashcard.model.Book;
+import com.example.trinhle.sflashcard.utils.DisplayImage;
+
 
 import java.util.List;
 
 /**
  * Created by Trinh Le on 09/08/2016.
  */
-public class BookAdapter extends BaseAdapter {
+public class BookAdapter extends BaseAdapter implements DisplayImage{
 
     Context context;
     List<Book> bookList;
@@ -58,6 +60,8 @@ public class BookAdapter extends BaseAdapter {
         }
 
         Book book = bookList.get(position);
+        String url = book.getUrl();
+        imageLoader.displayImage(url, holder.ivBookImage, option);
         String bookName = book.getBookName();
         holder.tvBookName.setText(bookName);
         String bookDesc = book.getDescription();

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background"
     tools:context="com.example.trinhle.sflashcard.CollectionActivity">
 
     <android.support.v7.widget.Toolbar
@@ -28,6 +29,8 @@
     <ListView
         android:id="@+id/lv_collection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content">
+
+    </ListView>
 
 </LinearLayout>

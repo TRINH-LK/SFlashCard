@@ -10,13 +10,16 @@ import android.widget.TextView;
 
 import com.example.trinhle.sflashcard.R;
 import com.example.trinhle.sflashcard.model.Collection;
+import com.example.trinhle.sflashcard.utils.DisplayImage;
+import com.example.trinhle.sflashcard.utils.ImageLoaderApplication;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 /**
  * Created by Trinh Le on 05/08/2016.
  */
-public class CollectionAdapter extends BaseAdapter {
+public class CollectionAdapter extends BaseAdapter implements DisplayImage {
 
     Context context;
     List<Collection> collectionList;
@@ -60,6 +63,8 @@ public class CollectionAdapter extends BaseAdapter {
         }
 
         Collection item = collectionList.get(position);
+        String thumbLink = item.getThumbLink();
+        imageLoader.displayImage(thumbLink, holder.ivThumbLink, option);
         String itemName = item.getCollectionName();
         holder.tvCollectionName.setText(itemName);
         String itemDesc = item.getDescription();

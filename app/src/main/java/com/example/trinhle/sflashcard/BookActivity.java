@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.trinhle.sflashcard.adapter.BookAdapter;
 import com.example.trinhle.sflashcard.database.BookHandler;
+import com.example.trinhle.sflashcard.database.BookInfoHandler;
 import com.example.trinhle.sflashcard.model.Book;
 import com.example.trinhle.sflashcard.model.Collection;
 import com.google.gson.Gson;
@@ -39,6 +41,7 @@ public class BookActivity extends AppCompatActivity {
     private TextView tvTitleBook;
     private ListView lvBook;
     private BookHandler bookHandler;
+    private BookInfoHandler bookInfoHandler;
     private BookAdapter bookAdapter;
 
     @Override
@@ -54,8 +57,9 @@ public class BookActivity extends AppCompatActivity {
         setBookTitle(collectionName);
 
         bookHandler = new BookHandler(this);
+        bookInfoHandler = new BookInfoHandler(this);
         populateBook(urlJSON, collectionId);
-
+        handleBookEvent();
 
     }
 
@@ -129,6 +133,23 @@ public class BookActivity extends AppCompatActivity {
             }
         });
         queue.add(request);
+    }
+
+    private void handleBookEvent() {
+        lvBook.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Book selectBook = (Book) lvBook.getItemAtPosition(i);
+                String bookId = selectBook.getBookId();
+                Intent showInfoIntent = new Intent(BookActivity.this, InfoActivity.class);
+                showInfoIntent.putExtra("bookId", bookId);
+                if (!isNetworkAvailable() && bookInfoHandler.getBookInfo(bookId) == null) {
+                    Toast.makeText(getApplicationContext(),"Connect failed", Toast.LENGTH_LONG).show();
+                } else {
+                    startActivity(showInfoIntent);
+                }
+            }
+        });
     }
 
     // Check Internet Connection
